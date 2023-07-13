@@ -1,8 +1,9 @@
 import pika
 
 from main import Product, db
+from config import rabbitmq_host, rabbitmq_port, rabbitmq_user, rabbitmq_password
 
-params = pika.URLParameters('amqps://wwwikjkc:pUD8_GzUi7O_w4cldiQyZVstok7LBxf4@toad.rmq.cloudamqp.com/wwwikjkc')
+params = pika.URLParameters(f'amqp://{rabbitmq_user}:{rabbitmq_password}@{rabbitmq_host}:{rabbitmq_port}')
 
 connection = pika.BlockingConnection(params)
 

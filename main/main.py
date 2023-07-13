@@ -5,14 +5,15 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
 import requests
 
+from config import db_user, db_password, db_host, db_name
+
 from producer import publish
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
+app.config["SQLALCHEMY_DATABASE_URI"] = f'mysql://{db_user}:{db_password}@{db_host}/{db_name}'
 CORS(app)
 
 db = SQLAlchemy(app)
-
 
 @dataclass
 class Product(db.Model):
@@ -24,7 +25,6 @@ class Product(db.Model):
     title = db.Column(db.String(200))
     image = db.Column(db.String(200))
 
-
 @dataclass
 class ProductUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,11 +33,10 @@ class ProductUser(db.Model):
 
     UniqueConstraint('user_id', 'product_id', name='user_product_unique')
 
-
 @app.route('/api/products')
 def index():
+    print ('WHO WHAT', db)
     return jsonify(Product.query.all())
-
 
 @app.route('/api/products/<int:id>/like', methods=['POST'])
 def like(id):
@@ -56,7 +55,6 @@ def like(id):
     return jsonify({
         'message': 'success'
     })
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
