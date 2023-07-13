@@ -1,25 +1,15 @@
-
 version: '3.8'
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: "python main.py"
+  rabbit:
+    image: rabbitmq:management
+    restart: always
+    container_name: rabbit
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest    
     ports:
-      - 8001:5000
-    volumes:
-      - .:/app
-    depends_on:
-      - db
-
-  queue:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: "python consumer.py"
-    depends_on:
-      - db
+      - "5672:5672"
+      - "15672:15672"    
 
   db:
     image: mysql:5.7.22
@@ -33,3 +23,27 @@ services:
       - .dbdata:/var/lib/mysql
     ports:
       - 33067:3306
+
+  backend:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "python main.py"
+    ports:
+      - 8001:5000
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbit
+      - db
+
+  queue:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "python consumer.py"
+    depends_on:
+      - rabbit
+      - db
