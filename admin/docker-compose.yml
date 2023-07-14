@@ -1,4 +1,3 @@
-
 version: '3.8'
 services:
   backend:
@@ -11,6 +10,7 @@ services:
       - .:/app
     depends_on:
       - db
+      - rabbitmq      
 
   queue:
     build:
@@ -19,6 +19,18 @@ services:
     command: "python consumer.py"
     depends_on:
       - db
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:management
+    restart: always
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest    
+    ports:
+      - "5672:5672"
+      - "15672:15672"  
 
   db:
     image: mysql:5.7.22
