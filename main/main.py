@@ -35,12 +35,11 @@ class ProductUser(db.Model):
 
 @app.route('/api/products')
 def index():
-    print ('WHO WHAT', db)
     return jsonify(Product.query.all())
 
 @app.route('/api/products/<int:id>/like', methods=['POST'])
 def like(id):
-    req = requests.get('http://docker.for.mac.localhost:8000/api/user')
+    req = requests.get('http://localhost:8000/api/user')
     json = req.json()
 
     try:
