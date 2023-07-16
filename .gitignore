@@ -1,3 +1,5 @@
 admin/venv
 admin/.dbdata
+main/.dbdata
 main/venv
+**/.__pycache__
