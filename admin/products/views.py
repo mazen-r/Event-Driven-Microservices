@@ -1,12 +1,11 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import random
 
 from .models import Product, User
 from .producer import publish
 from .serializers import ProductSerializer
-import random
-
 
 class ProductViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -39,7 +38,6 @@ class ProductViewSet(viewsets.ViewSet):
         product.delete()
         publish('product_deleted', pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class UserAPIView(APIView):
     def get(self, _):

@@ -6,7 +6,6 @@ from sqlalchemy import UniqueConstraint
 import requests
 
 from config import db_user, db_password, db_host, db_name
-
 from producer import publish
 
 app = Flask(__name__)
