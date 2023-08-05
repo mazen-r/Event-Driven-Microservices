@@ -43,7 +43,7 @@ The app is divided into 2 main microservices:
   - cd into the admin directory and spin up the server using docker:  
   `docker-compose up --build`
   - ssh into the backend container to:  
-  `docker exec backend ssh`
+  `docker-compose exec backend ssh`
   - Migrate Django's models into the db:  
   `python manage.py makemigrations`  
   `python manage.py migrate`
